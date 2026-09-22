@@ -48,6 +48,7 @@ Calibrada con dos fuentes oficiales:
 |---|---|---|
 | `int x = 0;` | 2 | declaración + asignación |
 | `int n = A.length;` | 2 | `.length` (1) + asignación (1) |
+| **Cada acceso a un arreglo** | **1** | lectura Y escritura; `A[i][j]` cuenta 1 (no 2). `v[i] = v[i] + v[j]` → 1 (acceso izq) + 1 (igualación) + 1 + 1 (accesos der) + 1 (suma) = **5** (confirmado en asesoría) |
 | **`.length` en cualquier parte** | **+1 cada vez que se evalúa** | `i < v.length` → 2 ; `i < v.length - c` → 3 ; `new int[v.length]` → k+1 (confirmado en asesoría) |
 | `int x = expr;` | 2 + ops(expr) | ej. `int x = n*n+5;` → 4 ; `int n2 = j+10;` → 3 |
 | `x = y;` | 1 | asignación simple |

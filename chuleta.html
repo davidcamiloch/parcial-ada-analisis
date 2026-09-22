@@ -37,7 +37,10 @@
 <tr><td><code>int x = n*n+5;</code></td><td>2 + operadores (4)</td></tr>
 <tr><td><code>x = y;</code></td><td>1</td></tr>
 <tr><td><code>i++</code> <code>i--</code> <code>i+=2</code> <code>i=i/2</code> <code>k*=3</code></td><td>2</td></tr>
+<tr><td><b>cada acceso a arreglo</b> (lectura O escritura)</td><td><b>1</b> · <code>A[i][j]</code> cuenta 1, no 2</td></tr>
 <tr><td><code>suma += A[i][i];</code></td><td>3 (acceso+suma+asig)</td></tr>
+<tr><td><code>v[i] = v[j];</code></td><td>3 (acceso izq + asig + acceso der)</td></tr>
+<tr><td><code>v[i] = v[i] + v[j];</code></td><td><b>5</b> (acceso izq + asig + 2 accesos + suma)</td></tr>
 <tr><td><code>suma += A[i][n-i-1];</code></td><td>4 (+1 índice)</td></tr>
 <tr><td><code>a += i + k + n;</code></td><td>4</td></tr>
 <tr><td><code>p = p + i*i;</code></td><td>3</td></tr>
@@ -108,6 +111,7 @@ O = cota superior (peor caso); Ω = inferior (mejor); Θ = ambas. Término domin
 
 <div class="caja trampa"><h2>7. Trampas</h2>
 <ul>
+<li><b>El acceso de la IZQUIERDA también se cobra:</b> <code>v[i] = v[i] + v[j]</code> = 5 (1 acceso izq + 1 igualación + 2 accesos der + 1 suma); <code>copy[i] = array[i]</code> = 3, no 2.</li>
 <li><b><code>.length</code> se cuenta:</b> vale 1 y se paga en CADA evaluación → <code>i &lt; v.length</code> cuesta 2 (no 1); con <code>int n = v.length;</code> antes del for, la condición vuelve a costar 1.</li>
 <li><b>Ciclo que no entra:</b> <code>n2 = j+10; while (n2 &lt; j)</code> → 0 vueltas, cuesta 1.</li>
 <li><b>Parece log, es constante:</b> <code>i = n²+5; i &gt;= n²; i/=2</code> → 1 vuelta (n ≥ 3).</li>

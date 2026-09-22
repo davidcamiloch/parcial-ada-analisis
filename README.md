@@ -81,7 +81,10 @@ Calibrada con la solución oficial del simulacro y la plantilla Excel del curso:
 | **`.length` donde aparezca** | **+1 cada vez que se evalúa** |
 | `x = y;` | 1 |
 | `i++` · `i--` · `i += 2` · `i = i / 2` · `k *= 3` | 2 |
+| **cada acceso a arreglo** (lectura o escritura, `A[i][j]` cuenta 1) | **1** |
 | `suma += A[i][i];` | 3 |
+| `v[i] = v[j];` | 3 (acceso izq + asignación + acceso der) |
+| `v[i] = v[i] + v[j];` | **5** |
 | `suma += A[i][n-i-1];` | 4 |
 | Condición del ciclo / `if` | 1 (+1 por operador) |
 | `i < v.length` · `i < v.length - c` | 2 · 3 |
@@ -97,6 +100,7 @@ Hay un **interruptor "Convención: Profesor / Hojas resumen"** para ver cómo ca
 
 ## ⚠️ Trampas que el juego te enseña a ver
 
+- El **acceso del lado izquierdo también cuenta**: `v[i] = v[i] + v[j]` son 5 OE (acceso izq + igualación + 2 accesos + suma), no 4.
 - El **`.length` sí se cuenta** (confirmado en asesoría): `i < v.length` cuesta 2, no 1. Guardar `int n = v.length;` antes del ciclo ahorra una OE por vuelta.
 - El ciclo que **nunca entra** (`n2 = j + 10; while (n2 < j)`): 0 vueltas, cuesta 1.
 - El ciclo que **parece logarítmico y corre 1 vez** (`i = n²+5; i >= n²; i /= 2`).

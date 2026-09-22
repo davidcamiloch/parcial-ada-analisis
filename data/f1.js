@@ -25,7 +25,7 @@
           ciclo: { tipo: 'while', var: 'i', desde: '1', hasta: 'n', t: 'n', invariante: 'i == n', valores: 'i = 0, 1, 2, …, n−1 (dentro); sale con i = n' },
           partes: [L('while.cond', 'i < n', 1, 1, 'n+1', { rol: 'cond', porque: 'La comparación cuesta 1.', porqueVeces: 'El cuerpo corre n veces (i = 0..n−1) y la condición se evalúa una vez más para salir: n + 1.', tag: 'condveces' })],
           cuerpo: [
-            L('cuerpo', 'v[i++] = new Random().nextInt(n);', '2+k', '3+k', 'n', { porque: 'El profe lo cuenta como 2 + k: acceso/asignación en v[…] (2) más la llamada de librería (k). El i++ va incluido en ese 2.', tag: 'k', alt: { prof: ['3+k', '4+k'], hojas: ['2+k', '4+k'] } })
+            L('cuerpo', 'v[i++] = new Random().nextInt(n);', '2+k', '3+k', 'n', { porque: 'En SU plantilla el profe agrupa esta línea en 2 + k: acceso a v[…] (1) + asignación (1) + la llamada de librería (k), con el i++ incluido. Contando el i++ aparte serían 4 + k; en el parcial usa el 2 + k de la plantilla.', tag: 'k', alt: { prof: ['3+k', '4+k'], hojas: ['2+k', '4+k'] } })
           ]
         },
         L('ret', 'return v;', 1, 1, 1, { porque: 'return cuesta 1.', tag: 'ret' })
@@ -190,13 +190,13 @@
       tamano: 'no depende de n',
       lineas: [
         L('aux', 'int aux = v[i];', 3, 2, 1, { porque: 'Declaración + asignación (2) + acceso v[i] (1) = 3.', tag: 'decl', alt: { prof: ['2'], hojas: ['1', '3'] } }),
-        L('a1', 'v[i] = v[j];', 2, 2, 1, { porque: 'Acceso v[j] (1) + asignación en v[i] (1) = 2.', tag: 'asig', alt: { prof: ['3'], hojas: ['1', '3'] } }),
+        L('a1', 'v[i] = v[j];', 3, 2, 1, { porque: 'Acceso v[i] de escritura (1) + asignación (1) + acceso v[j] de lectura (1) = 3. Cada acceso a un arreglo cuenta 1, también el del lado izquierdo.', tag: 'asig', alt: { prof: ['2'], hojas: ['1', '3'] } }),
         L('a2', 'v[j] = aux;', 2, 1, 1, { porque: 'Asignación en v[j]: acceso (1) + asignación (1) = 2.', tag: 'asig', alt: { prof: ['1'], hojas: ['2'] } })
       ],
       sinCiclo: true,
-      Tn: { prof: '7', hojas: '5' },
+      Tn: { prof: '8', hojas: '5' },
       bigO: '1',
-      pistas: ['Tres asignaciones con accesos a arreglo; nada depende de n.', '3 + 2 + 2 = 7 → constante → O(1).'],
+      pistas: ['Tres asignaciones con accesos a arreglo; nada depende de n.', '3 + 3 + 2 = 8 → constante → O(1).'],
       mejorPeor: 'No hay mejor ni peor caso: siempre se ejecutan las mismas 3 instrucciones. O(1) = Ω(1).',
       ejecutar(n, C) {
         const v = [4, 9, 1]; const i = 0, j = 2;
