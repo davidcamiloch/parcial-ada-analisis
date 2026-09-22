@@ -397,11 +397,11 @@
       lineas: [
         L('c0', 'int count = 1;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
         { id: 'w', txt: 'while (count < array.length) {', cierre: '}', ciclo: { tipo: 'while', var: 'c', desde: '1', hasta: 'n-1', t: 'n-1', total: 'n-1', invariante: 'count == n', valores: 'count = 1 … n−1' },
-          partes: [L('w.cond', 'count < array.length', 1, 1, 'n', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces' })],
+          partes: [L('w.cond', 'count < array.length', 2, 2, 'n', { rol: 'cond', porque: 'array.length (1) + comparación (1) = 2.', tag: 'condveces', alt: { prof: ['1'], hojas: ['1'] } })],
           cuerpo: [
             L('sc', 'int swapCount = 0;', 2, 1, 'n-1', { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
             { id: 'f', txt: 'for (int i = 0; i < array.length - count; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'n-c-1', t: 'n-c', total: 'n(n-1)/2', valores: 'i = 0 … n−count−1: n − count valores' },
-              partes: [L('f.init', 'int i = 0', 2, 1, 'n-1', { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('f.cond', 'i < array.length - count', 2, 2, 'n(n-1)/2 + n - 1', { rol: 'cond', porque: 'Resta + comparación: 2.', tag: 'condveces', alt: { prof: ['1'], hojas: ['1'] } }), L('f.upd', 'i++', 2, 1, 'n(n-1)/2', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
+              partes: [L('f.init', 'int i = 0', 2, 1, 'n-1', { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('f.cond', 'i < array.length - count', 3, 3, 'n(n-1)/2 + n - 1', { rol: 'cond', porque: 'array.length (1) + resta (1) + comparación (1) = 3.', tag: 'condveces', alt: { prof: ['2'], hojas: ['2'] } }), L('f.upd', 'i++', 2, 1, 'n(n-1)/2', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
               cuerpo: [
                 { id: 'if', txt: 'if (array[i] > array[i + 1]) {', cierre: '}', costo: { prof: '4', hojas: '4' }, veces: 'n(n-1)/2', porque: '2 accesos + suma + comparación = 4.', tag: 'cond', alt: { prof: ['3'], hojas: ['3'] },
                   cuerpo: [L('sw', 'swap(array, i, i + 1);', 'k+1', 'k+1', 'n(n-1)/2', { porque: 'Suma (1) + llamada O(1) (k).', tag: 'k', vecesMejor: '0', alt: { prof: ['k'], hojas: ['k'] } }), L('sc2', 'swapCount++;', 2, 1, 'n(n-1)/2', { porque: 'Suma + asignación: 2.', tag: 'upd', vecesMejor: '0' })] }
@@ -410,7 +410,7 @@
           ] }
       ],
       invariante: 'count == n', invAlt: ['count = n', 'count >= n', 'count>=n', 'count == array.length'],
-      Tn: { prof: '3 + 9(n-1) + (11+k)n(n-1)/2', hojas: '2 + 6(n-1) + (9+k)n(n-1)/2' }, bigO: 'n^2',
+      Tn: { prof: '4 + 11(n-1) + (12+k)n(n-1)/2', hojas: '3 + 8(n-1) + (10+k)n(n-1)/2' }, bigO: 'n^2',
       mejorPeor: 'swapCount se calcula pero NUNCA se consulta: el algoritmo no termina antes aunque el arreglo ya esté ordenado. Mejor caso (ascendente) solo se ahorra el swap: las n(n−1)/2 comparaciones se hacen igual → Θ(n²) en todos los casos.',
       guia: [
         { tipo: 'expr', pregunta: 'Vueltas del for para un valor fijo de count (llámalo c): $t_c = ?$', respuesta: 'n-c', vars: ['c'], ayuda: 'i < n − c con i desde 0: ⌈(n − c − 0)/1⌉ = n − c.' },
@@ -423,8 +423,8 @@
       pistas: ['El for da n − count vueltas; count va de 1 a n−1.', 'Busca dónde se LEE swapCount… no se lee.'],
       pasos: [
         { txt: 'Vueltas del for por cada count y total:', tex: 't_c = n-c, \\qquad \\sum_{c=1}^{n-1}(n-c) = \\frac{n(n-1)}{2}' },
-        { txt: 'Costo por vuelta del for (peor): cond 2 + if 4 + swap (k+1) + swapCount++ 2 + i++ 2 = 11 + k:', tex: '(11+k)\\frac{n(n-1)}{2}' },
-        { txt: 'Por cada count (n − 1): cond 1 + swapCount 2 + init i 2 + cond final for 2 + count++ 2 = 9. Fijos: count 2 + cond final while 1 = 3:', tex: 'T(n) = 3 + 9(n-1) + (11+k)\\frac{n(n-1)}{2} \\in \\Theta(n^2)' }
+        { txt: 'Costo por vuelta del for (peor): cond 3 (array.length + resta + comparación) + if 4 + swap (k+1) + swapCount++ 2 + i++ 2 = 12 + k:', tex: '(12+k)\\frac{n(n-1)}{2}' },
+        { txt: 'Por cada count (n − 1): cond del while 2 + swapCount 2 + init i 2 + cond final del for 3 + count++ 2 = 11. Fijos: count 2 + cond final del while 2 = 4:', tex: 'T(n) = 4 + 11(n-1) + (12+k)\\frac{n(n-1)}{2} \\in \\Theta(n^2)' }
       ],
       ejecutar(n, C, datos) {
         const a = (datos || desc(n)).slice(); C.c('c0'); let count = 1;
@@ -448,18 +448,18 @@
           cuerpo: [
             { id: 'call', txt: 'copy = appendToNew(copy, value);', cierre: '', costo: { prof: '1', hojas: '1' }, veces: 'n', porque: 'La asignación del resultado: 1. Lo que cuesta appendToNew va desplegado debajo.', tag: 'asig', llamada: 'appendToNew(array = copy (tamaño r), value)',
               cuerpo: [
-                L('nw', 'int[] bigger = new int[array.length + 1];', 'k+1', 'k+1', 'n', { porque: 'Suma (1) + new (k).', tag: 'k', alt: { prof: ['k', 'k+2'], hojas: ['k'] } }),
+                L('nw', 'int[] bigger = new int[array.length + 1];', 'k+2', 'k+2', 'n', { porque: 'array.length (1) + suma (1) + new (k) = k+2.', tag: 'k', alt: { prof: ['k+1'], hojas: ['k+1'] } }),
                 { id: 'fi', txt: 'for (int I = 0; I < array.length; I++) {', cierre: '}', ciclo: { tipo: 'for', var: 'I', desde: '0', hasta: 'r-1', t: 'r', total: 'n(n-1)/2', valores: 'en la llamada r el arreglo tiene r elementos: I = 0 … r−1' },
-                  partes: [L('fi.init', 'int I = 0', 2, 1, 'n', { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('fi.cond', 'I < array.length', 1, 1, 'n(n-1)/2 + n', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces' }), L('fi.upd', 'I++', 2, 1, 'n(n-1)/2', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
+                  partes: [L('fi.init', 'int I = 0', 2, 1, 'n', { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('fi.cond', 'I < array.length', 2, 2, 'n(n-1)/2 + n', { rol: 'cond', porque: 'array.length (1) + comparación (1) = 2.', tag: 'condveces', alt: { prof: ['1'], hojas: ['1'] } }), L('fi.upd', 'I++', 2, 1, 'n(n-1)/2', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
                   cuerpo: [L('cp', 'bigger[I] = array[I];', 2, 1, 'n(n-1)/2', { porque: 'Acceso + asignación: 2.', tag: 'asig', alt: { prof: ['1', '3'], hojas: ['2'] } })] },
-                L('last', 'bigger[bigger.length - 1] = value;', 2, 2, 'n', { porque: 'Resta (1) + asignación (1) = 2.', tag: 'asig', alt: { prof: ['3'], hojas: ['1', '3'] } }),
+                L('last', 'bigger[bigger.length - 1] = value;', 3, 3, 'n', { porque: 'bigger.length (1) + resta (1) + asignación (1) = 3.', tag: 'asig', alt: { prof: ['2', '4'], hojas: ['2', '4'] } }),
                 L('rb', 'return bigger;', 1, 1, 'n', { porque: 'return: 1.', tag: 'ret' })
               ] }
           ] },
         L('ret', 'return copy;', 1, 1, 1, { porque: 'return: 1.', tag: 'ret' })
       ],
       invariante: 'r == n', invAlt: ['r = n', 'value == null', 'se recorrieron los n elementos'],
-      Tn: { prof: '4 + k + (11+k)n + 5n(n-1)/2', hojas: '3 + k + (9+k)n + 3n(n-1)/2' }, bigO: 'n^2',
+      Tn: { prof: '4 + k + (14+k)n + 6n(n-1)/2', hojas: '3 + k + (12+k)n + 4n(n-1)/2' }, bigO: 'n^2',
       guia: [
         { tipo: 'opcion', pregunta: 'En la llamada número r (r = 0, 1, …, n−1), ¿cuántos elementos tiene copy y cuántas vueltas da el for de appendToNew?', opciones: [
           { txt: 'copy tiene r elementos → r vueltas.', ok: true, porque: 'Correcto: empieza vacío y crece de a 1.' },
@@ -474,8 +474,8 @@
       pistas: ['¿Cuántos elementos copia appendToNew en la llamada r?', 'Σ_{r=0}^{n-1} r = n(n−1)/2 → cuadrático.'],
       pasos: [
         { txt: 'Vueltas del for interno en la llamada r y total:', tex: 't_r = r, \\qquad \\sum_{r=0}^{n-1} r = \\frac{n(n-1)}{2}' },
-        { txt: 'Costo interno por vuelta: cond 1 + copia 2 + I++ 2 = 5:', tex: '5\\cdot\\frac{n(n-1)}{2}' },
-        { txt: 'Por cada llamada (n): cond 1 + upd 2 + asignación 1 + new (k+1) + init I 2 + cond final I 1 + último 2 + return 1 = 11 + k. Fijos: new k + init 2 + cond final 1 + return 1 = 4 + k:', tex: 'T(n) = 4 + k + (11+k)n + \\frac{5n(n-1)}{2} \\in O(n^2)' }
+        { txt: 'Costo interno por vuelta: cond 2 (array.length + comparación) + copia 2 + I++ 2 = 6:', tex: '6\\cdot\\frac{n(n-1)}{2}' },
+        { txt: 'Por cada llamada (n): cond 1 + upd 2 + asignación 1 + new (k+2) + init I 2 + cond final I 2 + último 3 + return 1 = 14 + k. Fijos: new k + init 2 + cond final 1 + return 1 = 4 + k:', tex: 'T(n) = 4 + k + (14+k)n + \\frac{6n(n-1)}{2} \\in O(n^2)' }
       ],
       ejecutar(n, C) {
         const array = asc(n); C.c('c0'); let copy = []; C.c('f.init');
@@ -807,21 +807,21 @@
         {
           titulo: 'copia directa', firma: 'static int[] copiaDirecta(int[] array)', tamano: 'n', iteraciones: 'n',
           lineas: [
-            L('nw', 'int[] copy = new int[array.length];', 'k', 'k', 1, { porque: 'new: k.', tag: 'k', alt: { prof: ['1+k', '2+k'], hojas: ['1+k'] } }),
+            L('nw', 'int[] copy = new int[array.length];', 'k+1', 'k+1', 1, { porque: 'array.length (1) + new (k) = k+1.', tag: 'k', alt: { prof: ['k', '2+k'], hojas: ['k'] } }),
             { id: 'f', txt: 'for (int i = 0; i < array.length; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', total: 'n', invariante: 'i == n' },
-              partes: [L('f.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('f.cond', 'i < array.length', 1, 1, 'n+1', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces' }), L('f.upd', 'i++', 2, 1, 'n', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
+              partes: [L('f.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('f.cond', 'i < array.length', 2, 2, 'n+1', { rol: 'cond', porque: 'array.length (1) + comparación (1) = 2.', tag: 'condveces', alt: { prof: ['1'], hojas: ['1'] } }), L('f.upd', 'i++', 2, 1, 'n', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
               cuerpo: [L('cp', 'copy[i] = array[i];', 2, 1, 'n', { porque: 'Acceso + asignación: 2.', tag: 'asig', alt: { prof: ['1', '3'], hojas: ['2'] } })] },
             L('ret', 'return copy;', 1, 1, 1, { porque: 'return: 1.', tag: 'ret' })
           ],
           invariante: 'i == n', invAlt: ['i = n', 'i>=n'],
-          Tn: { prof: '4 + k + 5n', hojas: '3 + k + 3n' }, bigO: 'n',
-          pistas: ['Un solo for de n vueltas.', 'T(n) = k + 2 + Σ_{i=0}^{n-1}(1 + 2 + 2) + 1 + 1.'],
+          Tn: { prof: '6 + k + 6n', hojas: '5 + k + 4n' }, bigO: 'n',
+          pistas: ['Un solo for de n vueltas.', 'T(n) = (k+1) + 2 + Σ_{i=0}^{n-1}(2 + 2 + 2) + 2 + 1.'],
           ejecutar(n, C) { const a = asc(n); C.c('nw'); const copy = new Array(n); C.c('f.init'); for (let i = 0; ; i++) { C.c('f.cond'); C.v({ i }); if (!(i < a.length)) break; C.c('cp'); copy[i] = a[i]; C.c('f.upd'); } C.c('ret'); return copy; }
         }
       ],
       nTabla: [10, 100, 1000], masEficiente: 1,
       opciones: [
-        { txt: 'La copia directa hace n copias y una sola reserva; appendToNew hace n reservas y n(n−1)/2 copias. O(n) frente a O(n²).', ok: true, porque: 'Correcto: para n = 1000, unas 5·10³ OE frente a 2.5·10⁶.' },
+        { txt: 'La copia directa hace n copias y una sola reserva; appendToNew hace n reservas y n(n−1)/2 copias. O(n) frente a O(n²).', ok: true, porque: 'Correcto: para n = 1000, unas 6·10³ OE frente a 3·10⁶.' },
         { txt: 'Son iguales: las dos copian n elementos.', ok: false, porque: 'appendToNew vuelve a copiar TODO lo anterior en cada llamada: 0 + 1 + … + (n−1) copias.' },
         { txt: 'appendToNew es mejor porque no necesita saber n de antemano.', ok: false, porque: 'Eso es una ventaja de diseño, no de eficiencia: cuesta n(n−1)/2 copias extra.' }
       ]

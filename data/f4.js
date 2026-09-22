@@ -47,7 +47,7 @@
       ],
       codigo: 'static int faltante(int[] v) {\n  int n = v.length;\n  int suma = 0;\n  for (int i = 0; i < n; i++) {\n    suma += v[i];\n  }\n  return (n + 1) * (n + 2) / 2 - suma;\n}',
       lineas: [
-        L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         L('s', 'int suma = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
         FOR('f', 'for (int i = 0; i < n; i++) {', 'int i = 0', 'i < n', 'i++', { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', invariante: 'i == n' }, [L('a', 'suma += v[i];', 3, 3, 'n', { porque: 'Acceso + suma + asignación = 3.', tag: 'acum' })], { cond: 'n+1', upd: 'n' }),
         L('ret', 'return (n + 1) * (n + 2) / 2 - suma;', 5, 5, 1, { porque: '4 operaciones (+, +, ·, /, −: el profe agrupa) + return: acepto 4–6.', tag: 'ret', alt: { prof: ['4', '6', '1'], hojas: ['4', '6', '1'] } })
@@ -266,13 +266,13 @@
       lineas: [
         L('c', 'int c = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
         FOR('f', 'for (int i = 0; i < v.length; i++) {', 'int i = 0', 'i < v.length', 'i++', { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', invariante: 'i == n' },
-          [{ id: 'if', txt: 'if (v[i] == x) {', cierre: '}', costo: { prof: '2', hojas: '2' }, veces: 'n', porque: 'Acceso + comparación: 2.', tag: 'cond', cuerpo: [L('cc', 'c++;', 2, 1, 'n', { porque: 'Suma + asignación: 2. Peor caso: todos son x.', tag: 'rama', vecesMejor: '0' })] }], { cond: 'n+1', upd: 'n' }),
+          [{ id: 'if', txt: 'if (v[i] == x) {', cierre: '}', costo: { prof: '2', hojas: '2' }, veces: 'n', porque: 'Acceso + comparación: 2.', tag: 'cond', cuerpo: [L('cc', 'c++;', 2, 1, 'n', { porque: 'Suma + asignación: 2. Peor caso: todos son x.', tag: 'rama', vecesMejor: '0' })] }], { cond: 'n+1', upd: 'n', condCosto: 2, condExtra: { porque: 'v.length (1) + comparación (1) = 2. El .length se paga en cada evaluación.', alt: { prof: ['1'], hojas: ['1'] } } }),
         L('ret', 'return c;', 1, 1, 1, { porque: 'return: 1.', tag: 'ret' })
       ],
       datos: { peor: (n) => Array(n).fill(5), mejor: (n) => Array(n).fill(0) }, casoTn: 'peor',
-      Tn: { prof: '6 + 7n', hojas: '4 + 5n' }, TnMejor: { prof: '6 + 5n', hojas: '4 + 4n' }, bigO: 'n', omega: 'n',
-      mejorPeor: 'El if depende de los datos, pero solo cambia 2 OE por vuelta (c++): peor caso (todos iguales a x) T = 6 + 7n, mejor caso (ninguno) T = 6 + 5n. El ORDEN no cambia: hay que recorrer siempre todo → O(n) = Ω(n).',
-      pasos: [{ txt: 'Siempre n vueltas; el if solo añade c++ cuando v[i] == x:', tex: 'T_{peor} = 6 + 7n,\\quad T_{mejor} = 6 + 5n \\;\\Rightarrow\\; \\Theta(n)' }],
+      Tn: { prof: '7 + 8n', hojas: '5 + 6n' }, TnMejor: { prof: '7 + 6n', hojas: '5 + 5n' }, bigO: 'n', omega: 'n',
+      mejorPeor: 'El if depende de los datos, pero solo cambia 2 OE por vuelta (c++): peor caso (todos iguales a x) T = 7 + 8n, mejor caso (ninguno) T = 7 + 6n. El ORDEN no cambia: hay que recorrer siempre todo → O(n) = Ω(n).',
+      pasos: [{ txt: 'Siempre n vueltas; el if solo añade c++ cuando v[i] == x:', tex: 'T_{peor} = 7 + 8n,\\quad T_{mejor} = 7 + 6n \\;\\Rightarrow\\; \\Theta(n)' }],
       ejecutar(n, C, datos) { const v = datos || Array(n).fill(5), x = 5; C.c('c'); let c = 0; C.c('f.init'); for (let i = 0; ; i++) { C.c('f.cond'); C.v({ i, c }); if (!(i < v.length)) break; C.c('if'); if (v[i] === x) { C.c('cc'); c++; } C.c('f.upd'); } C.c('ret'); return c; }
     })
   });
@@ -307,7 +307,7 @@
       ],
       codigo: 'static int sumaMatriz(int[][] A) {\n  int n = A.length;\n  int s = 0;\n  for (int i = 0; i < n; i++) {\n    for (int j = 0; j < n; j++) {\n      s += A[i][j];\n    }\n  }\n  return s;\n}',
       lineas: [
-        L('n', 'int n = A.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = A.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         L('s', 'int s = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
         FOR('fi', 'for (int i = 0; i < n; i++) {', 'int i = 0', 'i < n', 'i++', { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', total: 'n', invariante: 'i == n' },
           [FOR('fj', 'for (int j = 0; j < n; j++) {', 'int j = 0', 'j < n', 'j++', { tipo: 'for', var: 'j', desde: '0', hasta: 'n-1', t: 'n', total: 'n^2' }, [L('a', 's += A[i][j];', 3, 3, 'n^2', { porque: 'Acceso + suma + asignación = 3.', tag: 'acum' })], { init: 'n', cond: 'n^2+n', upd: 'n^2' })], { cond: 'n+1', upd: 'n' }),
@@ -336,7 +336,7 @@
       ],
       codigo: 'static boolean esSimetrica(int[][] A) {\n  int n = A.length;\n  for (int i = 0; i < n; i++) {\n    for (int j = i + 1; j < n; j++) {\n      if (A[i][j] != A[j][i]) {\n        return false;\n      }\n    }\n  }\n  return true;\n}',
       lineas: [
-        L('n', 'int n = A.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = A.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         FOR('fi', 'for (int i = 0; i < n; i++) {', 'int i = 0', 'i < n', 'i++', { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', total: 'n', invariante: 'i == n' },
           [{ id: 'fj', txt: 'for (int j = i + 1; j < n; j++) {', cierre: '}', ciclo: { tipo: 'for', var: 'j', desde: 'i+1', hasta: 'n-1', t: 'n-1-i', total: 'n(n-1)/2', valores: 'j = i+1 … n−1 → n − 1 − i; total Σ = n(n−1)/2' },
             partes: [L('fj.init', 'int j = i + 1', 3, 2, 'n', { rol: 'init', porque: 'Declaración + asignación (2) + suma (1) = 3.', tag: 'decl', vecesMejor: '1', alt: { prof: ['2'], hojas: ['1'] } }), L('fj.cond', 'j < n', 1, 1, 'n(n-1)/2 + n', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces', vecesMejor: '1' }), L('fj.upd', 'j++', 2, 1, 'n(n-1)/2', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd', vecesMejor: '0' })],
@@ -369,7 +369,7 @@
       ],
       codigo: sec ? 'static int diagSecundaria(int[][] A) {\n  int n = A.length;\n  int s = 0;\n  for (int i = 0; i < n; i++) {\n    s += A[i][n - 1 - i];\n  }\n  return s;\n}' : 'static int diagPrincipal(int[][] A) {\n  int n = A.length;\n  int s = 0;\n  for (int i = 0; i < n; i++) {\n    s += A[i][i];\n  }\n  return s;\n}',
       lineas: [
-        L('n', 'int n = A.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = A.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         L('s', 'int s = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
         FOR('f', 'for (int i = 0; i < n; i++) {', 'int i = 0', 'i < n', 'i++', { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', invariante: 'i == n' },
           [sec ? L('a', 's += A[i][n - 1 - i];', 4, 5, 'n', { porque: 'Acceso + suma + índice + asignación = 4.', tag: 'indice', alt: { prof: ['5'], hojas: ['4'] } }) : L('a', 's += A[i][i];', 3, 3, 'n', { porque: 'Acceso + suma + asignación = 3.', tag: 'acum' })], { cond: 'n+1', upd: 'n' }),
@@ -396,7 +396,7 @@
       ],
       codigo: 'static void invertir(int[] v) {\n  int n = v.length;\n  for (int i = 0; i < n / 2; i++) {\n    int aux = v[i];\n    v[i] = v[n - 1 - i];\n    v[n - 1 - i] = aux;\n  }\n}',
       lineas: [
-        L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         { id: 'f', txt: 'for (int i = 0; i < n / 2; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'floor(n/2)-1', t: 'floor(n/2)', invariante: 'i == n / 2', valores: 'i = 0 … ⌊n/2⌋ − 1' },
           partes: [L('f.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('f.cond', 'i < n / 2', 2, 2, 'floor(n/2)+1', { rol: 'cond', porque: 'División + comparación: 2.', tag: 'condveces', alt: { prof: ['1'], hojas: ['1'] } }), L('f.upd', 'i++', 2, 1, 'floor(n/2)', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
           cuerpo: [L('a1', 'int aux = v[i];', 3, 2, 'floor(n/2)', { porque: 'Declaración + asignación (2) + acceso (1) = 3.', tag: 'decl', alt: { prof: ['2'], hojas: ['1'] } }), L('a2', 'v[i] = v[n - 1 - i];', 3, 3, 'floor(n/2)', { porque: 'Acceso + índice + asignación = 3.', tag: 'indice', alt: { prof: ['2', '4'], hojas: ['2', '4'] } }), L('a3', 'v[n - 1 - i] = aux;', 2, 2, 'floor(n/2)', { porque: 'Índice + asignación = 2.', tag: 'asig', alt: { prof: ['1', '3'], hojas: ['1', '3'] } })] }
@@ -421,7 +421,7 @@
       ],
       codigo: 'static boolean ordenado(int[] v) {\n  int n = v.length;\n  for (int i = 0; i < n - 1; i++) {\n    if (v[i] > v[i + 1]) {\n      return false;\n    }\n  }\n  return true;\n}',
       lineas: [
-        L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         { id: 'f', txt: 'for (int i = 0; i < n - 1; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'n-2', t: 'n-1', invariante: 'i == n - 1', valores: 'peor caso: i = 0 … n−2' },
           partes: [L('f.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('f.cond', 'i < n - 1', 2, 2, 'n', { rol: 'cond', porque: 'Resta + comparación: 2.', tag: 'condveces', vecesMejor: '1', alt: { prof: ['1'], hojas: ['1'] } }), L('f.upd', 'i++', 2, 1, 'n-1', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd', vecesMejor: '0' })],
           cuerpo: [{ id: 'if', txt: 'if (v[i] > v[i + 1]) {', cierre: '}', costo: { prof: '4', hojas: '4' }, veces: 'n-1', porque: '2 accesos + suma + comparación = 4.', tag: 'cond', vecesMejor: 'min(1, n-1)', alt: { prof: ['3'], hojas: ['3'] },
@@ -449,7 +449,7 @@
       ],
       codigo: 'static int faltante0(int[] v) {\n  int n = v.length;\n  int suma = 0;\n  for (int i = 0; i < n; i++) {\n    suma += v[i];\n  }\n  return n * (n + 1) / 2 - suma;\n}',
       lineas: [
-        L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         L('s', 'int suma = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
         FOR('f', 'for (int i = 0; i < n; i++) {', 'int i = 0', 'i < n', 'i++', { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', invariante: 'i == n' }, [L('a', 'suma += v[i];', 3, 3, 'n', { porque: 'Acceso + suma + asignación = 3.', tag: 'acum' })], { cond: 'n+1', upd: 'n' }),
         L('ret', 'return n * (n + 1) / 2 - suma;', 4, 4, 1, { porque: '3 operaciones + resta + return (agrupado): 4. Acepto 3–5.', tag: 'ret', alt: { prof: ['3', '5', '1'], hojas: ['3', '5', '1'] } })
@@ -473,7 +473,7 @@
       ],
       codigo: 'static int[] interseccion(int[] A, int[] B) {\n  int n = A.length;\n  int[] C = new int[n];\n  int k = 0;\n  for (int i = 0; i < n; i++) {\n    for (int j = 0; j < n; j++) {\n      if (A[i] == B[j]) {\n        C[k] = A[i];\n        k++;\n        break;\n      }\n    }\n  }\n  return C;\n}',
       lineas: [
-        L('n', 'int n = A.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = A.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         L('C', 'int[] C = new int[n];', 'k', 'k', 1, { porque: 'new: k.', tag: 'k', alt: { prof: ['1+k', '2+k'], hojas: ['1+k'] } }),
         L('k', 'int k = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
         FOR('fi', 'for (int i = 0; i < n; i++) {', 'int i = 0', 'i < n', 'i++', { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', total: 'n', invariante: 'i == n' },
@@ -508,7 +508,7 @@
       ],
       codigo: 'static boolean poliDivisible(long n) {\n  int d = String.valueOf(n).length();\n  while (n > 0) {\n    if (n % d != 0) {\n      return false;\n    }\n    n = n / 10;\n    d--;\n  }\n  return true;\n}',
       lineas: [
-        L('d', 'int d = String.valueOf(n).length();', 'k', 'k', 1, { porque: 'Librería: k (o un ciclo de ⌊log₁₀ n⌋ + 1 vueltas si se cuenta a mano).', tag: 'k', alt: { prof: ['2+k', '1+k'], hojas: ['2+k', '1+k'] } }),
+        L('d', 'int d = String.valueOf(n).length();', '1+k', '1+k', 1, { porque: 'Librería String.valueOf (k) + .length() (1) = k+1. (El .length SÍ se cuenta.)', tag: 'k', alt: { prof: ['2+k', 'k'], hojas: ['2+k', 'k'] } }),
         { id: 'w', txt: 'while (n > 0) {', cierre: '}', ciclo: { tipo: 'while', var: 'r', desde: '1', hasta: 'floor(log10(n))+1', t: 'floor(log10(n))+1', tol: 1, invariante: 'n == 0', valores: 'peor caso: d vueltas (una por dígito); mejor: 1' },
           partes: [L('w.cond', 'n > 0', 1, 1, 'floor(log10(n))+2', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces', vecesMejor: '2 - min(1, floor(log10(n)))', tol: 1 })],
           cuerpo: [
@@ -520,9 +520,9 @@
         L('rt', 'return true;', 1, 1, 1, { porque: 'return: 1 (peor caso).', tag: 'ret', vecesMejor: '1 - min(1, floor(log10(n)))' })
       ],
       datos: { peor: (n) => buscarPoli(String(n).length), mejor: (n) => { const d = String(n).length; return d === 1 ? n : Math.pow(10, d - 1) + 1; } }, casoTn: 'peor', nMin: 10,
-      Tn: { prof: '2 + k + 7(floor(log10(n))+1)', hojas: '2 + k + 6(floor(log10(n))+1)' }, TnMejor: { prof: '4 + k', hojas: '4 + k' }, TnAprox: true, bigO: 'log(n)', omega: '1',
-      mejorPeor: 'Peor caso: el número ES PoliDivisible → una vuelta por dígito: d = ⌊log₁₀ n⌋ + 1 → T = 2 + k + 7d → O(log n). Mejor caso: n % d ≠ 0 en la primera vuelta → T = 5 + k → Ω(1). (Con d = 1 siempre pasa: el mejor caso real necesita d ≥ 2.)',
-      pasos: [{ txt: 'Peor caso: d = ⌊log₁₀ n⌋ + 1 vueltas de costo 1 + 2 + 2 + 2 = 7:', tex: 'T_{peor}(n) = k + 1 + 7d + 1 = 2 + k + 7(\\lfloor\\log_{10} n\\rfloor + 1) \\in O(\\log n)' }, { txt: 'Mejor caso: el primer residuo no es 0:', tex: 'T_{mejor}(n) = k + 1 + 2 + 1 = 4 + k \\in \\Omega(1)' }],
+      Tn: { prof: '3 + k + 7(floor(log10(n))+1)', hojas: '3 + k + 6(floor(log10(n))+1)' }, TnMejor: { prof: '5 + k', hojas: '5 + k' }, TnAprox: true, bigO: 'log(n)', omega: '1',
+      mejorPeor: 'Peor caso: el número ES PoliDivisible → una vuelta por dígito: d = ⌊log₁₀ n⌋ + 1 → T = 3 + k + 7d → O(log n). Mejor caso: n % d ≠ 0 en la primera vuelta → T = 5 + k → Ω(1). (Con d = 1 siempre pasa: el mejor caso real necesita d ≥ 2.)',
+      pasos: [{ txt: 'Peor caso: d = ⌊log₁₀ n⌋ + 1 vueltas de costo 1 + 2 + 2 + 2 = 7:', tex: 'T_{peor}(n) = (k+1) + 1 + 7d + 1 = 3 + k + 7(\\lfloor\\log_{10} n\\rfloor + 1) \\in O(\\log n)' }, { txt: 'Mejor caso: el primer residuo no es 0:', tex: 'T_{mejor}(n) = (k+1) + 1 + 2 + 1 = 5 + k \\in \\Omega(1)' }],
       ejecutar(n, C, datos) { let x = datos != null ? datos : buscarPoli(String(n).length); C.c('d'); let d = String(x).length; for (;;) { C.c('w.cond'); C.v({ n: x, d }); if (!(x > 0)) break; C.c('if'); if (x % d !== 0) { C.c('rf'); return false; } C.c('n10'); x = idiv(x, 10); C.c('dd'); d--; } C.c('rt'); return true; }
     })
   });
@@ -549,7 +549,7 @@
           titulo: 'faltanteBusqueda (doble for)', firma: 'static int faltanteBusqueda(int[] v)', tamano: 'n = v.length', iteraciones: 'n(n+1)', casoTn: 'peor',
           datos: { peor: (n) => asc(n) },
           lineas: [
-            L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+            L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
             FOR('fk', 'for (int k = 0; k <= n; k++) {', 'int k = 0', 'k <= n', 'k++', { tipo: 'for', var: 'k', desde: '0', hasta: 'n', t: 'n+1', total: 'n+1', invariante: 'k == n + 1' },
               [L('e', 'boolean esta = false;', 2, 1, 'n+1', { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
                 FOR('fi', 'for (int i = 0; i < n; i++) {', 'int i = 0', 'i < n', 'i++', { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', total: 'n(n+1)' }, [{ id: 'if', txt: 'if (v[i] == k) {', cierre: '}', costo: { prof: '2', hojas: '2' }, veces: 'n(n+1)', porque: 'Acceso + comparación: 2.', tag: 'cond', cuerpo: [L('t', 'esta = true;', 1, 1, 'n', { porque: 'Asignación: 1. Una vez por cada k que sí está: n.', tag: 'rama' })] }], { init: 'n+1', cond: 'n(n+1) + n + 1', upd: 'n(n+1)' }),

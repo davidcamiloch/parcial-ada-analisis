@@ -28,7 +28,7 @@
 
   /* ---------- Convenciones ---------- */
   ADA.CONVENCIONES = {
-    prof: { nombre: 'Profesor', desc: 'Plantilla Excel + solución del simulacro: declaración+asignación = 2, i++ = 2, condición 1 (t+1 veces).' },
+    prof: { nombre: 'Profesor', desc: 'Plantilla Excel + solución del simulacro: declaración+asignación = 2, i++ = 2, condición 1 (t+1 veces), .length = 1 cada vez que se evalúa.' },
     hojas: { nombre: 'Hojas resumen', desc: 'Hojas PNG: cada instrucción vale 1 (int i=0 → 1, i++ → 1); for = 3t+2 con cuerpo 1.' }
   };
   ADA.K_DEMO = 3; // valor numérico de k para tablas

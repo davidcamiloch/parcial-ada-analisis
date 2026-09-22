@@ -31,7 +31,9 @@
 <div class="caja"><h2>1. Costo de cada OE (convención del profe)</h2>
 <table>
 <tr><th>Instrucción</th><th>Costo</th></tr>
-<tr><td><code>int x = 0;</code> <code>int n = A.length;</code></td><td>2</td></tr>
+<tr><td><code>int x = 0;</code></td><td>2</td></tr>
+<tr><td><code>int n = A.length;</code></td><td>2 (<code>.length</code> 1 + asignación 1)</td></tr>
+<tr><td><b><code>.length</code> donde sea</b> (condición, <code>new int[v.length]</code>, índice)</td><td><b>+1 cada vez que se evalúa</b></td></tr>
 <tr><td><code>int x = n*n+5;</code></td><td>2 + operadores (4)</td></tr>
 <tr><td><code>x = y;</code></td><td>1</td></tr>
 <tr><td><code>i++</code> <code>i--</code> <code>i+=2</code> <code>i=i/2</code> <code>k*=3</code></td><td>2</td></tr>
@@ -40,12 +42,13 @@
 <tr><td><code>a += i + k + n;</code></td><td>4</td></tr>
 <tr><td><code>p = p + i*i;</code></td><td>3</td></tr>
 <tr><td>condición <code>i &lt; n</code> / <code>if</code></td><td>1 (+1 por operador: <code>k&lt;n*j</code> → 2)</td></tr>
+<tr><td>condición <code>i &lt; v.length</code></td><td>2 · <code>i &lt; v.length-c</code> → 3</td></tr>
 <tr><td><code>return x;</code> <code>return a == b;</code></td><td>1</td></tr>
 <tr><td><code>new</code>, <code>println</code>, <code>Math.sqrt</code></td><td>k</td></tr>
 <tr><td>llamada a método propio</td><td>T<sub>M</sub>(n) × veces</td></tr>
 <tr><td>llaves, else, comentarios</td><td>0</td></tr>
 </table>
-<b>Condición del ciclo se evalúa t + 1 veces</b> (t dentro de Σ, +1 suelto). Un ciclo que NO entra cuesta 1.</div>
+<b>Condición del ciclo se evalúa t + 1 veces</b> (t dentro de Σ, +1 suelto). Un ciclo que NO entra cuesta 1 (2 si la condición lleva <code>.length</code>).</div>
 
 <div class="caja"><h2>2. Modelo T(n) (así lo escribe el profe)</h2>
 <div class="f">T(n) = fijos + Σ<sub>i=a</sub><sup>b</sup>(cond + cuerpo + actualización) + 1 + fijos finales</div>
@@ -105,6 +108,7 @@ O = cota superior (peor caso); Ω = inferior (mejor); Θ = ambas. Término domin
 
 <div class="caja trampa"><h2>7. Trampas</h2>
 <ul>
+<li><b><code>.length</code> se cuenta:</b> vale 1 y se paga en CADA evaluación → <code>i &lt; v.length</code> cuesta 2 (no 1); con <code>int n = v.length;</code> antes del for, la condición vuelve a costar 1.</li>
 <li><b>Ciclo que no entra:</b> <code>n2 = j+10; while (n2 &lt; j)</code> → 0 vueltas, cuesta 1.</li>
 <li><b>Parece log, es constante:</b> <code>i = n²+5; i &gt;= n²; i/=2</code> → 1 vuelta (n ≥ 3).</li>
 <li><b>Base del log:</b> k/=2 → log₂ (el simulacro dice log₃: mismo Big-O).</li>

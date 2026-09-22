@@ -114,7 +114,7 @@
       codigo: 'static boolean esPalindromo(int[] v) {\n  int n = v.length;\n  for (int i = 0; i < n / 2; i++) {\n    if (v[i] != v[n - 1 - i]) {\n      return false;\n    }\n  }\n  return true;\n}',
       datos: { peor: (n) => Array(n).fill(7), mejor: (n) => { const a = asc(n); if (n > 1) a[0] = -1; return a; } },
       lineas: [
-        L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Obtener tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         { id: 'f', txt: 'for (int i = 0; i < n / 2; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'floor(n/2)-1', t: 'floor(n/2)', invariante: 'i == n / 2', valores: 'peor caso: i = 0 … ⌊n/2⌋ − 1' },
           partes: [L('f.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('f.cond', 'i < n / 2', 2, 2, 'floor(n/2)+1', { rol: 'cond', porque: 'División + comparación: 2.', porqueVeces: 'Peor caso: ⌊n/2⌋ + 1.', tag: 'condveces', vecesMejor: '1', alt: { prof: ['1'], hojas: ['1'] } }), L('f.upd', 'i++', 2, 1, 'floor(n/2)', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd', vecesMejor: '0' })],
           cuerpo: [
@@ -144,7 +144,7 @@
       titulo: 'diag1 (doble for con if)', firma: 'public static int diag1(int[][] A)', tamano: 'n = A.length', iteraciones: 'n^2',
       lineas: [
         L('s', 'int s = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
-        L('n', 'int n = A.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = A.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         { id: 'fi', txt: 'for (int i = 0; i < n; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', total: 'n', invariante: 'i == n' },
           partes: [L('fi.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('fi.cond', 'i < n', 1, 1, 'n+1', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces' }), L('fi.upd', 'i++', 2, 1, 'n', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
           cuerpo: [
@@ -166,7 +166,7 @@
       titulo: 'diag2 (un for)', firma: 'public static int diag2(int[][] A)', tamano: 'n = A.length', iteraciones: 'n',
       lineas: [
         L('s', 'int s = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
-        L('n', 'int n = A.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = A.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         { id: 'fi', txt: 'for (int i = 0; i < n; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', invariante: 'i == n' },
           partes: [L('fi.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('fi.cond', 'i < n', 1, 1, 'n+1', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces' }), L('fi.upd', 'i++', 2, 1, 'n', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
           cuerpo: [L('acum', 's += A[i][n - 1 - i];', 4, 5, 'n', { porque: 'Acceso + suma + índice (n−1−i) + asignación = 4 (como en el simulacro).', tag: 'indice', alt: { prof: ['5'], hojas: ['4'] } })] },
@@ -294,7 +294,7 @@
       codigo: 'static boolean hayConsecutivosIguales(int[] v) {\n  int n = v.length;\n  for (int i = 0; i < n - 1; i++) {\n    if (v[i] == v[i + 1]) {\n      return true;\n    }\n  }\n  return false;\n}',
       datos: { peor: (n) => asc(n), mejor: (n) => Array(n).fill(3) },
       lineas: [
-        L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         { id: 'f', txt: 'for (int i = 0; i < n - 1; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'n-2', t: 'n-1', invariante: 'i == n - 1', valores: 'peor caso: i = 0 … n−2' },
           partes: [L('f.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('f.cond', 'i < n - 1', 2, 2, 'n', { rol: 'cond', porque: 'Resta + comparación: 2.', porqueVeces: 'Peor caso: (n − 1) + 1 = n.', tag: 'condveces', vecesMejor: '1', alt: { prof: ['1'], hojas: ['1'] } }), L('f.upd', 'i++', 2, 1, 'n-1', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd', vecesMejor: '0' })],
           cuerpo: [
@@ -324,7 +324,7 @@
       titulo: 'max1 (doble for)', firma: 'public static int max1(int[] v)', tamano: 'n = v.length', iteraciones: 'n^2', casoTn: 'peor',
       datos: { peor: (n) => asc(n) },
       lineas: [
-        L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         L('mx', 'int mx = v[0];', 3, 2, 1, { porque: 'Declaración + asignación (2) + acceso (1) = 3.', tag: 'decl', alt: { prof: ['2'], hojas: ['1'] } }),
         { id: 'fi', txt: 'for (int i = 0; i < n; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', total: 'n', invariante: 'i == n' },
           partes: [L('fi.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('fi.cond', 'i < n', 1, 1, 'n+1', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces' }), L('fi.upd', 'i++', 2, 1, 'n', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],
@@ -350,7 +350,7 @@
       titulo: 'max2 (un for)', firma: 'public static int max2(int[] v)', tamano: 'n = v.length', iteraciones: 'n-1', casoTn: 'peor',
       datos: { peor: (n) => asc(n) },
       lineas: [
-        L('n', 'int n = v.length;', 2, 2, 1, { porque: 'Tamaño + inicialización: 2.', tag: 'decl' }),
+        L('n', 'int n = v.length;', 2, 2, 1, { porque: '.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
         L('mx', 'int mx = v[0];', 3, 2, 1, { porque: 'Declaración + asignación (2) + acceso (1) = 3.', tag: 'decl', alt: { prof: ['2'], hojas: ['1'] } }),
         { id: 'fi', txt: 'for (int i = 1; i < n; i++) {', cierre: '}', ciclo: { tipo: 'for', var: 'i', desde: '1', hasta: 'n-1', t: 'n-1', invariante: 'i == n' },
           partes: [L('fi.init', 'int i = 1', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }), L('fi.cond', 'i < n', 1, 1, 'n', { rol: 'cond', porque: 'Comparación: 1.', tag: 'condveces' }), L('fi.upd', 'i++', 2, 1, 'n-1', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })],

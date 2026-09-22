@@ -14,7 +14,7 @@ Calibrada con dos fuentes oficiales:
 
 | Línea | Operación según el profe | Costo |
 |---|---|---|
-| `int n = A.length;` | obtener tamaño + inicialización | 2 |
+| `int n = A.length;` | `.length` (1) + inicialización (1) — **el `.length` SÍ se cuenta** | 2 |
 | `int sumaPrincipal = 0;` | declaración + asignación | 2 |
 | `int sumaSecundaria = 0;` | declaración + asignación | 2 |
 | `for (int i = 0; …)` | declaración + asignación | 2 (1 vez) |
@@ -46,13 +46,15 @@ Calibrada con dos fuentes oficiales:
 
 | Instrucción | Costo | Comentario |
 |---|---|---|
-| `int x = 0;` `int n = A.length;` | 2 | declaración + asignación |
+| `int x = 0;` | 2 | declaración + asignación |
+| `int n = A.length;` | 2 | `.length` (1) + asignación (1) |
+| **`.length` en cualquier parte** | **+1 cada vez que se evalúa** | `i < v.length` → 2 ; `i < v.length - c` → 3 ; `new int[v.length]` → k+1 (confirmado en asesoría) |
 | `int x = expr;` | 2 + ops(expr) | ej. `int x = n*n+5;` → 4 ; `int n2 = j+10;` → 3 |
 | `x = y;` | 1 | asignación simple |
 | `i++` `i--` `i += 2` `i = i + 2` `i *= 3` `i = i / 2` `n /= 10` | 2 | operación + asignación |
 | `x += expr` | 2 + ops(expr) | `suma += v[i]` → 3 ; `c += k*n*j` → 4 ; `sum += n % 10` → 3 |
 | `x = expr` | 1 + ops(expr) | `p = p + i*i` → 3 ; `suma = suma + a[i][k]*b[k][j]` → 5 |
-| Condición de ciclo / `if` | 1 (+1 por operador aritmético dentro) | `i < n` → 1 ; `k < n*j` → 2 ; `guess*guess < n` → 2 ; `i % 2 == 0` → 2 |
+| Condición de ciclo / `if` | 1 (+1 por operador aritmético dentro, +1 por `.length`) | `i < n` → 1 ; `k < n*j` → 2 ; `guess*guess < n` → 2 ; `i % 2 == 0` → 2 ; `i < v.length` → 2 |
 | Condición de ciclo: veces | **t + 1** | t dentro de la sumatoria, +1 suelto al salir |
 | `return x;` `return a == b;` | 1 | |
 | `else` | 0 | |

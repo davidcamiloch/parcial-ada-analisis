@@ -62,7 +62,7 @@
         firma: 'static boolean sonIgualesD(int A[][])',
         tamano: 'n = A.length (matriz n×n)',
         lineas: [
-          L('n', 'int n = A.length;', 2, 2, 1, { porque: 'Obtener el tamaño + inicializar: 2.', tag: 'decl' }),
+          L('n', 'int n = A.length;', 2, 2, 1, { porque: 'A.length (1) + inicializar n (1) = 2. El profe SÍ cuenta el .length.', tag: 'decl' }),
           L('sp', 'int sumaPrincipal = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
           L('ss', 'int sumaSecundaria = 0;', 2, 1, 1, { porque: 'Declaración + asignación: 2.', tag: 'decl' }),
           {
@@ -218,7 +218,7 @@
           ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'n-1', t: 'n', invariante: 'i == n', valores: 'i = 0, 1, 2, …, n−1' },
           partes: [
             L('for.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }),
-            L('for.cond', 'i < v.length', 1, 1, 'n+1', { rol: 'cond', porque: 'Comparación: 1 (v.length es un acceso a campo; el profe no lo cobra aparte).', porqueVeces: 'n vueltas + 1 evaluación falsa.', tag: 'condveces', alt: { prof: ['2'], hojas: ['2'] } }),
+            L('for.cond', 'i < v.length', 2, 2, 'n+1', { rol: 'cond', porque: 'v.length (1) + comparación (1) = 2. El profe SÍ cuenta el .length, y se paga en CADA evaluación.', porqueVeces: 'n vueltas + 1 evaluación falsa.', tag: 'condveces', alt: { prof: ['1'], hojas: ['1'] } }),
             L('for.upd', 'i++', 2, 1, 'n', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })
           ],
           cuerpo: [
@@ -229,10 +229,10 @@
         L('ret', 'return suma;', 1, 1, 1, { porque: 'return: 1.', tag: 'ret' })
       ],
       invariante: 'i == n', invAlt: ['i = n', 'i>=n', 'i >= n', 'i == v.length', 'i = v.length'],
-      Tn: { prof: '6 + 5n + 3ceil(n/2)', hojas: '4 + 4n + 3ceil(n/2)' },
+      Tn: { prof: '7 + 6n + 3ceil(n/2)', hojas: '5 + 5n + 3ceil(n/2)' },
       bigO: 'n',
       iteraciones: 'n',
-      pistas: ['El if se evalúa n veces, pero su cuerpo solo ⌈n/2⌉ (posiciones pares).', 'T(n) = 2 + 2 + 1 + 1 + Σ_{i=0}^{n-1}(1 + 2 + 2) + Σ_{r=1}^{⌈n/2⌉} 3.'],
+      pistas: ['El if se evalúa n veces, pero su cuerpo solo ⌈n/2⌉ (posiciones pares).', 'T(n) = 2 + 2 + 2 + 1 + Σ_{i=0}^{n-1}(2 + 2 + 2) + Σ_{r=1}^{(n/2)} 3.'],
       ejecutar(n, C) {
         const v = Array.from({ length: n }, (_, i) => i + 1);
         C.c('s'); let suma = 0; C.c('for.init');
@@ -257,7 +257,7 @@
           ciclo: { tipo: 'for', var: 'i', desde: '0', hasta: 'ceil(n/2)-1', t: 'ceil(n/2)', invariante: 'i >= n', valores: 'i = 0, 2, 4, … (< n)' },
           partes: [
             L('for.init', 'int i = 0', 2, 1, 1, { rol: 'init', porque: 'Declaración + asignación: 2.', tag: 'decl' }),
-            L('for.cond', 'i < v.length', 1, 1, 'ceil(n/2)+1', { rol: 'cond', porque: 'Comparación: 1.', porqueVeces: '⌈n/2⌉ vueltas + 1 evaluación falsa.', tag: 'condveces', alt: { prof: ['2'], hojas: ['2'] } }),
+            L('for.cond', 'i < v.length', 2, 2, 'ceil(n/2)+1', { rol: 'cond', porque: 'v.length (1) + comparación (1) = 2. El .length se paga en CADA evaluación.', porqueVeces: '(n/2) vueltas + 1 evaluación falsa.', tag: 'condveces', alt: { prof: ['1'], hojas: ['1'] } }),
             L('for.upd', 'i = i + 2', 2, 2, 'ceil(n/2)', { rol: 'upd', porque: 'Suma + asignación: 2.', tag: 'upd' })
           ],
           cuerpo: [L('acum', 'suma += v[i];', 3, 3, 'ceil(n/2)', { porque: 'Acceso (1) + suma (1) + asignación (1) = 3.', porqueVeces: 'Corre en cada vuelta: ⌈n/2⌉.', tag: 'acum' })]
@@ -265,10 +265,10 @@
         L('ret', 'return suma;', 1, 1, 1, { porque: 'return: 1.', tag: 'ret' })
       ],
       invariante: 'i >= n', invAlt: ['i>=n', 'i >= v.length', 'i == n', 'i = n'],
-      Tn: { prof: '6 + 6ceil(n/2)', hojas: '4 + 6ceil(n/2)' },
+      Tn: { prof: '7 + 7ceil(n/2)', hojas: '5 + 7ceil(n/2)' },
       bigO: 'n',
       iteraciones: 'ceil(n/2)',
-      pistas: ['i toma 0, 2, 4, … mientras sea < n: ⌈n/2⌉ valores.', 'T(n) = 2 + 2 + 1 + 1 + Σ_{r=1}^{⌈n/2⌉}(1 + 3 + 2).'],
+      pistas: ['i toma 0, 2, 4, … mientras sea < n: ⌈n/2⌉ valores.', 'T(n) = 2 + 2 + 2 + 1 + Σ_{r=1}^{(n/2)}(2 + 3 + 2).'],
       ejecutar(n, C) {
         const v = Array.from({ length: n }, (_, i) => i + 1);
         C.c('s'); let suma = 0; C.c('for.init');
@@ -290,8 +290,8 @@
       nTabla: [10, 100, 1000],
       masEficiente: 1,
       opciones: [
-        { txt: 'Son igual de eficientes porque los dos son O(n).', ok: false, porque: 'El Big-O iguala constantes; el enunciado pide contar iteraciones e instrucciones. Con n = 100, suma1 ejecuta 656 OE y suma2 306.' },
-        { txt: 'suma2 es más eficiente: da ⌈n/2⌉ vueltas en lugar de n y en cada vuelta no evalúa el if (6 OE por vuelta frente a 5 + 3 en las pares). Ambos son O(n).', ok: true, porque: 'Correcto: menos iteraciones y menos instrucciones por iteración; el orden asintótico sí es el mismo.' },
+        { txt: 'Son igual de eficientes porque los dos son O(n).', ok: false, porque: 'El Big-O iguala constantes; el enunciado pide contar iteraciones e instrucciones. Con n = 100, suma1 ejecuta 757 OE y suma2 357.' },
+        { txt: 'suma2 es más eficiente: da ⌈n/2⌉ vueltas en lugar de n y en cada vuelta no evalúa el if (7 OE por vuelta frente a 6 + 3 en las pares). Ambos son O(n).', ok: true, porque: 'Correcto: menos iteraciones y menos instrucciones por iteración; el orden asintótico sí es el mismo.' },
         { txt: 'suma1 es más eficiente porque revisa todas las posiciones y es más seguro.', ok: false, porque: 'Revisar posiciones impares es trabajo inútil: n vueltas + n evaluaciones de i % 2.' },
         { txt: 'suma2 es O(n/2) y suma1 es O(n), por eso suma2 es de menor orden.', ok: false, porque: 'O(n/2) = O(n): las constantes no cambian el orden. La ventaja de suma2 es en iteraciones e instrucciones, no en Big-O.' }
       ]

@@ -76,12 +76,15 @@ Calibrada con la solución oficial del simulacro y la plantilla Excel del curso:
 
 | Instrucción | Costo |
 |---|:---:|
-| `int x = 0;` · `int n = A.length;` | 2 |
+| `int x = 0;` | 2 |
+| `int n = A.length;` | 2 (`.length` 1 + asignación 1) |
+| **`.length` donde aparezca** | **+1 cada vez que se evalúa** |
 | `x = y;` | 1 |
 | `i++` · `i--` · `i += 2` · `i = i / 2` · `k *= 3` | 2 |
 | `suma += A[i][i];` | 3 |
 | `suma += A[i][n-i-1];` | 4 |
 | Condición del ciclo / `if` | 1 (+1 por operador) |
+| `i < v.length` · `i < v.length - c` | 2 · 3 |
 | `return x;` | 1 |
 | `new`, `println`, `Math.sqrt` | k |
 
@@ -94,6 +97,7 @@ Hay un **interruptor "Convención: Profesor / Hojas resumen"** para ver cómo ca
 
 ## ⚠️ Trampas que el juego te enseña a ver
 
+- El **`.length` sí se cuenta** (confirmado en asesoría): `i < v.length` cuesta 2, no 1. Guardar `int n = v.length;` antes del ciclo ahorra una OE por vuelta.
 - El ciclo que **nunca entra** (`n2 = j + 10; while (n2 < j)`): 0 vueltas, cuesta 1.
 - El ciclo que **parece logarítmico y corre 1 vez** (`i = n²+5; i >= n²; i /= 2`).
 - La **base del logaritmo**: `k = k/2` es log₂ (la hoja de respuestas del simulacro dice log₃; mismo Big-O).
