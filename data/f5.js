@@ -64,7 +64,7 @@
     { txt: 'T_M(n): el método se analiza una sola vez.', ok: false, porque: 'Se ejecuta n veces; cada ejecución cuesta T_M.' },
     { txt: 'n + T_M(n).', ok: false, porque: 'Se suma solo si la llamada estuviera FUERA del ciclo.' }
   ], 'Simulacro P1: n² log n vueltas × M(n) constante → O(n² log n). Simulacro P2: log₉ n vueltas × algunValor O(log₃ n) → Θ(log² n).', 'Llamadas');
-  Q('Q13', 'Ciclo interno constante', 'Un ciclo interno corre siempre 8 veces (for (j = i; j < 8 + i; j++)). ¿Cambia el orden del algoritmo?', [
+  Q('Q13', 'Ciclo interno con límite 8 + i', 'Un ciclo interno corre siempre 8 veces (for (j = i; j < 8 + i; j++)). ¿Cambia el orden del algoritmo?', [
     { txt: 'No: multiplica por una constante (8), y las constantes no cambian el Big-O.', ok: true },
     { txt: 'Sí: dos ciclos anidados siempre dan n².', ok: false, porque: 'Solo si el interno depende de n. Aquí da 8 vueltas fijas.' },
     { txt: 'Sí: lo vuelve O(8n).', ok: false, porque: 'O(8n) = O(n).' }
@@ -94,12 +94,12 @@
     { txt: 'O(n): cada llamada cuesta c y hay n llamadas.', ok: false, porque: 'Hay log₂ n llamadas, no n: el tamaño se parte a la mitad cada vez.' },
     { txt: 'O(n²).', ok: false, porque: 'Eso sería 4T(n/2) + n (Primero/Segundo), no una sola llamada.' }
   ], 'Desenrollar = sustituir k veces y encontrar cuándo se llega al caso base. Con 4T(n/2) + 2n (recursión mutua) sale n².', 'Recursión');
-  Q('Q19', 'Trampa: ciclo que no entra', 'int n2 = j + 10; while (n2 < j) { … }  ¿Cuánto aporta al T(n)?', [
+  Q('Q19', 'while (n2 < j) con n2 = j + 10', 'int n2 = j + 10; while (n2 < j) { … }  ¿Cuánto aporta al T(n)?', [
     { txt: '1: solo la evaluación (falsa) de la condición. 0 vueltas.', ok: true },
     { txt: 'Nada: si no entra no cuesta.', ok: false, porque: 'Preguntar cuesta: la condición se evalúa una vez.' },
     { txt: 'j vueltas.', ok: false, porque: 'n2 empieza por encima de j: la condición es falsa desde el principio.' }
   ], 'Antes de aplicar fórmulas compara el valor inicial con la condición.', 'Trampas');
-  Q('Q20', 'Trampa: divide pero es constante', 'for (i = n*n + 5; i >= n*n; i = i/2): ¿cuántas vueltas para n ≥ 3?', [
+  Q('Q20', 'for con i = i / 2 desde n² + 5', 'for (i = n*n + 5; i >= n*n; i = i/2): ¿cuántas vueltas para n ≥ 3?', [
     { txt: '1: tras una división (n²+5)/2 ya es menor que n². Parece log pero es constante.', ok: true },
     { txt: 'log₂ n: divide entre 2.', ok: false, porque: 'Solo da log si hay que bajar mucho; aquí el límite está a distancia constante del inicio.' },
     { txt: 'n²', ok: false, porque: 'Se divide entre 2, no se resta 1.' }

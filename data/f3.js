@@ -295,9 +295,9 @@
 
   /* =============== A16 Hoja 12 completo (mejor y peor) =============== */
   reg({
-    id: 'A16', tipo: 'A', titulo: 'Racha más larga: while que depende de los datos', fuente: 'Hoja 1 #12',
+    id: 'A16', tipo: 'A', titulo: 'Racha ascendente más larga', fuente: 'Hoja 1 #12',
     def: () => ({
-      enunciado: 'El while interno compara elementos del arreglo: su número de vueltas depende de los DATOS. Analice el PEOR caso (arreglo ascendente) y diga cuál es el mejor. En Java se agrega j < n para no salirse del arreglo.',
+      enunciado: 'Halle T(n), la invariante del ciclo externo y el Big-O. Mire con cuidado la condición del while: decida usted si hay mejor y peor caso y, si los hay, con qué arreglo se dan. En Java se agrega j < n para no salirse del arreglo.',
       firma: 'static int rachaMax(int[] a, int n)', tamano: 'n', casoTn: 'peor',
       datos: { peor: (n) => asc(n), mejor: (n) => desc(n) },
       lineas: [
@@ -347,7 +347,7 @@
 
   /* =============== A17 burbuja (Hoja 18) =============== */
   reg({
-    id: 'A17', tipo: 'A', titulo: 'Burbuja con límites raros (i desde 2, j hasta n−i)', fuente: 'Hoja 1 #18',
+    id: 'A17', tipo: 'A', titulo: 'Burbuja con i desde 2 y j hasta n−i', fuente: 'Hoja 1 #18',
     def: () => ({
       enunciado: 'Los límites vienen tal cual de la Hoja: i desde 2 hasta n−1, j desde 0 hasta n−i (inclusive). intercambia cuesta k. Analice el PEOR caso (descendente: siempre intercambia). n ≥ 2.',
       firma: 'static void burbuja(int[] v, int n)', tamano: 'n', nMin: 2, casoTn: 'peor',
@@ -389,7 +389,7 @@
 
   /* =============== A18 sortByValue (Hoja 23) =============== */
   reg({
-    id: 'A18', tipo: 'A', titulo: 'sortByValue: while + for (swapCount no se usa)', fuente: 'Hoja 1 #23',
+    id: 'A18', tipo: 'A', titulo: 'sortByValue: while externo + for interno', fuente: 'Hoja 1 #23',
     def: () => ({
       enunciado: 'Burbuja con while externo. swap cuesta k. Analice el PEOR caso (descendente) y luego piense: ¿swapCount cambia algo? n ≥ 1.',
       firma: 'public static void sortByValue(int[] array)', tamano: 'n = array.length', casoTn: 'peor',
@@ -437,9 +437,9 @@
 
   /* =============== A19 copyArray + appendToNew =============== */
   reg({
-    id: 'A19', tipo: 'A', titulo: 'copyArray: un for visible, otro escondido en appendToNew', fuente: 'Hoja 1 #21',
+    id: 'A19', tipo: 'A', titulo: 'copyArray con appendToNew', fuente: 'Hoja 1 #21',
     def: () => ({
-      enunciado: 'copyArray parece O(n) porque solo se ve un for, pero llama a appendToNew, que copia todo el arreglo cada vez. El for-each se cuenta como un for normal (r = 0..n−1). new cuesta k.',
+      enunciado: 'copyArray recorre el arreglo y en cada vuelta llama a appendToNew, cuyas líneas aparecen desplegadas bajo la llamada. Cuente el costo TOTAL. El for-each se cuenta como un for normal (r = 0..n−1). new cuesta k.',
       firma: 'static int[] copyArray(int[] array)  +  static int[] appendToNew(int[] array, int value)', tamano: 'n = array.length',
       lineas: [
         L('c0', 'int[] copy = new int[0];', 'k', 'k', 1, { porque: 'new: k.', tag: 'k', alt: { prof: ['1+k', '2+k'], hojas: ['1+k'] } }),
@@ -555,7 +555,7 @@
 
   /* =============== A24 simulacro P1 =============== */
   reg({
-    id: 'A24', tipo: 'A', titulo: 'Simulacro P1: for-for-for con k/2 llamando a M(n)', fuente: 'Simulacro P1',
+    id: 'A24', tipo: 'A', titulo: 'Simulacro P1: tres for anidados que llaman a M(n)', fuente: 'Simulacro P1',
     def: () => ({
       enunciado: 'Es el punto 1 del simulacro. Suponga n ≥ 3. M(n) se llama dentro del ciclo más interno: sus líneas van desplegadas bajo la llamada y cuentan tantas veces como se llama. println cuesta k. Indique cuántas veces se ejecuta cada ciclo y justifique el Big-O. (Ojo con la base del logaritmo y con cuántas vueltas da M.)',
       firma: 'public static void metodo(int n)  +  public static void M(int n)', tamano: 'n', nMin: 3, nMax: 100, TnAprox: true,
@@ -618,7 +618,7 @@
 
   /* =============== A25 simulacro P2 getUFPS (cota superior) =============== */
   reg({
-    id: 'A25', tipo: 'A', titulo: 'Simulacro P2: getUFPS (n/9) llama a algunValor (k*=3)', fuente: 'Simulacro P2',
+    id: 'A25', tipo: 'A', titulo: 'Simulacro P2: getUFPS llama a algunValor', fuente: 'Simulacro P2',
     def: () => ({
       enunciado: 'Punto 2 del simulacro con j = 1. algunValor se llama dentro del while; sus líneas van desplegadas. Como n se divide entre 9 en cada vuelta, cada llamada es MÁS BARATA que la anterior: para el T(n) se usa la COTA SUPERIOR (todas cuestan como la primera, con n). Ojo con el while (n2 < j): ¿entra?',
       firma: 'int getUFPS(int n, int j)  +  int algunValor(int n, int j)', tamano: 'el valor de n (j = 1)', nMin: 2, cota: true, TnAprox: true,

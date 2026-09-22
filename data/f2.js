@@ -55,7 +55,7 @@
     })
   });
   reg({
-    id: 'V04', titulo: 'salto con <= y piso', fuente: 'Hoja resumen', variantes: [{ ini: 1, m: 3 }, { ini: 2, m: 5 }],
+    id: 'V04', titulo: 'salto de m en m con <=', fuente: 'Hoja resumen', variantes: [{ ini: 1, m: 3 }, { ini: 2, m: 5 }],
     def: (p) => ({
       cabecera: `for (int i = ${p.ini}; i <= n; i += ${p.m})`,
       t: `floor((n - ${p.ini})/${p.m}) + 1`, tolerancia: 0,
@@ -182,7 +182,7 @@
 
   /* ---------- Trampas: no entra / ~1 vez ---------- */
   reg({
-    id: 'V14', titulo: 'ciclo que NUNCA entra', fuente: 'Simulacro P2 (n2 < j)', variantes: [{ d: 10 }, { d: 1 }],
+    id: 'V14', titulo: 'while (n2 < j) con n2 = j + d', fuente: 'Simulacro P2 (n2 < j)', variantes: [{ d: 10 }, { d: 1 }],
     def: (p) => ({
       cabecera: `int n2 = j + ${p.d};\nwhile (n2 < j) { c += k * n * j; n2++; }`, contexto: 'j = n (o cualquier valor)',
       t: '0', tolerancia: 0,
@@ -194,7 +194,7 @@
     })
   });
   reg({
-    id: 'V15', titulo: 'parece log pero corre 1 vez (M(n))', fuente: 'Simulacro P1', variantes: [{ c: 5 }, { c: 3 }],
+    id: 'V15', titulo: 'M(n): for con i = i / 2 desde n² + c', fuente: 'Simulacro P1', variantes: [{ c: 5 }, { c: 3 }],
     def: (p) => ({
       cabecera: `int x = n * n + ${p.c};\nfor (int i = x; i >= n * n; i = i / 2)`, contexto: 'n ≥ 3',
       t: '1', tolerancia: 0, nMin: 3,
@@ -229,7 +229,7 @@
     })
   });
   reg({
-    id: 'V17', titulo: 'i *= 2 o j /= 2 (la razón j/i se parte)', fuente: 'Hoja 1 #7', variantes: [{}],
+    id: 'V17', titulo: 'while (i < j): i *= 2 o j /= 2', fuente: 'Hoja 1 #7', variantes: [{}],
     def: () => ({
       cabecera: 'int i = 1, j = n;\nwhile (i < j) {\n  if (a[i] < a[j]) i = i * 2; else j = j / 2;\n}',
       dependeDatos: true,
@@ -250,7 +250,7 @@
     })
   });
   reg({
-    id: 'V18', titulo: 'while que depende de los datos (mejor y peor)', fuente: 'Hoja 1 #12', variantes: [{}],
+    id: 'V18', titulo: 'while (j < n && a[i] <= a[j])', fuente: 'Hoja 1 #12', variantes: [{}],
     def: () => ({
       cabecera: 'cont = 1; j = i + 1;\nwhile (j < n && a[i] <= a[j]) { j = j + 1; cont = cont + 1; }', contexto: 'para la primera vuelta del for externo: i = 0',
       dependeDatos: true,
